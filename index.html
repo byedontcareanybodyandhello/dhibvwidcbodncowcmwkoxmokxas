@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دعوت دیت🍓</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ADD8E6;
+    --card-bg:#B0E0E6;
+    --box-bg:#cbe1f6;
+    --btn-off:#87CEEB;
+    --btn-on:#4682B4;
+    --heading:#5c2148;
+    --text:#9a6f8a;
+    --text-soft:#b98ca6;
+    --primary-a:#6495ED;
+    --primary-b:#4169E1;
+    --border-soft:#e6d6f0;
+    --danger:#e0457b;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  body{
+    font-family:'Vazirmatn', Tahoma, sans-serif;
+    min-height:100vh;
+    background:var(--bg);
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:28px 16px 60px;
+    color:var(--text);
+  }
+
+  .wrap{
+    width:100%;
+    max-width:420px;
+  }
+
+  .card{
+    background:var(--card-bg);
+    border-radius:28px;
+    padding:36px 26px 30px;
+    box-shadow:0 20px 45px rgba(180, 60, 150, 0.14);
+    min-height:520px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .dots{
+    display:flex;
+    gap:8px;
+    margin-bottom:34px;
+  }
+  .dot{
+    height:8px;
+    width:8px;
+    border-radius:99px;
+    background:var(--box-bg);
+    transition:all .35s ease;
+  }
+  .dot.active{
+    width:28px;
+    background:linear-gradient(90deg, var(--primary-a), var(--primary-b));
+  }
+  .dot.done{
+    background:var(--primary-b);
+  }
+
+  .screen{
+    display:none;
+    width:100%;
+    flex-direction:column;
+    align-items:center;
+    animation:fadeIn .4s ease;
+  }
+  .screen.active{ display:flex; }
+
+  @keyframes fadeIn{
+    from{ opacity:0; transform:translateY(8px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .emoji-big{
+    font-size:50px;
+    margin-bottom:14px;
+    line-height:1;
+  }
+
+  h1{
+    font-size:23px;
+    color:var(--heading);
+    font-weight:800;
+    margin-bottom:10px;
+    line-height:1.6;
+  }
+
+  .subtitle{
+    font-size:14.5px;
+    color:var(--text);
+    margin-bottom:30px;
+    line-height:1.9;
+  }
+
+  .btn-row{
+    display:flex;
+    gap:14px;
+    align-items:center;
+    justify-content:center;
+    margin-top:10px;
+    margin-bottom:46px;
+  }
+
+  button{
+    font-family:inherit;
+    border:none;
+    cursor:pointer;
+    outline:none;
+  }
+
+  .btn-yes{
+    background:linear-gradient(135deg, var(--primary-a), var(--primary-b));
+    color:#fff;
+    font-size:16px;
+    font-weight:700;
+    padding:16px 34px;
+    border-radius:99px;
+    box-shadow:0 12px 24px rgba(236, 45, 118, 0.3);
+    transition:transform .25s ease;
+    white-space:nowrap;
+    transform-origin:center bottom;
+  }
+
+  .btn-no{
+    background:var(--box-bg);
+    color:var(--text-soft);
+    font-size:15px;
+    font-weight:600;
+    padding:16px 26px;
+    border-radius:99px;
+    transition:all .25s ease;
+    transform-origin:center bottom;
+  }
+
+  .nudge{
+    margin-top:8px;
+    font-size:13.5px;
+    color:var(--primary-b);
+    font-weight:600;
+    min-height:40px;
+  }
+
+  .field{
+    width:100%;
+    text-align:right;
+    margin-bottom:20px;
+  }
+  .field label{
+    display:block;
+    font-size:14px;
+    font-weight:700;
+    color:var(--heading);
+    margin-bottom:8px;
+  }
+  .field input{
+    width:100%;
+    font-family:inherit;
+    font-size:15px;
+    color:var(--heading);
+    background:#fff;
+    border:1.5px solid var(--border-soft);
+    border-radius:14px;
+    padding:14px 16px;
+    direction:ltr;
+    text-align:center;
+  }
+  .field input:focus{
+    border-color:var(--primary-a);
+  }
+
+  .primary-wide{
+    width:100%;
+    background:var(--btn-off);
+    color:var(--heading);
+    font-size:15.5px;
+    font-weight:700;
+    padding:16px;
+    border-radius:16px;
+    margin-top:8px;
+    transition:all .25s ease;
+  }
+  .primary-wide.ready{
+    background:var(--btn-on);
+    color:var(--heading);
+    box-shadow:0 10px 20px rgba(150, 100, 200, 0.18);
+  }
+  .primary-wide:disabled{
+    cursor:not-allowed;
+    opacity:.75;
+  }
+
+  .order-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    width:100%;
+    margin-bottom:26px;
+  }
+  .order-card{
+    background:var(--box-bg);
+    border:2px solid transparent;
+    border-radius:16px;
+    padding:16px 18px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    text-align:right;
+    position:relative;
+    transition:all .2s ease;
+  }
+  .order-card .icon{
+    font-size:26px;
+    flex-shrink:0;
+  }
+  .order-card .label{
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--heading);
+    line-height:1.6;
+  }
+  .order-card.selected{
+    background:#fff;
+    border-color:var(--primary-a);
+    box-shadow:0 8px 18px rgba(236,45,118,0.15);
+  }
+  .check{
+    position:absolute;
+    top:12px;
+    left:12px;
+    width:22px;
+    height:22px;
+    border-radius:99px;
+    background:var(--primary-b);
+    color:#fff;
+    font-size:12px;
+    display:none;
+    align-items:center;
+    justify-content:center;
+  }
+  .order-card.selected .check{ display:flex; }
+
+  .error-text{
+    color:var(--danger);
+    font-size:13px;
+    margin-top:10px;
+    min-height:16px;
+    font-weight:600;
+  }
+
+  .final-box{
+    background:var(--box-bg);
+    border-radius:18px;
+    padding:20px;
+    width:100%;
+    margin:10px 0 20px;
+    font-size:15px;
+    color:var(--heading);
+    line-height:2.1;
+    font-weight:600;
+    white-space:pre-line;
+  }
+
+  .footnote{
+    margin-top:auto;
+    padding-top:20px;
+    border-top:1px dashed var(--border-soft);
+    font-size:12.5px;
+    color:var(--text-soft);
+    line-height:1.8;
+  }
+
+  @media (max-width:380px){
+    .card{ padding:30px 18px 26px; }
+    h1{ font-size:20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="card">
+
+    <div class="dots" id="dots">
+      <div class="dot" data-i="0"></div>
+      <div class="dot" data-i="1"></div>
+      <div class="dot" data-i="2"></div>
+      <div class="dot" data-i="3"></div>
+      <div class="dot" data-i="4"></div>
+    </div>
+
+    <!-- Screen 1: Yes/No -->
+    <div class="screen" data-screen="0">
+      <h1>یه دیتمون نشه؟</h1>
+      <p class="subtitle">جوابش مشخصه</p>
+      <div class="btn-row">
+        <button class="btn-no" id="btnNo" type="button">نه</button>
+        <button class="btn-yes" id="btnYes" type="button">💞 آره</button>
+      </div>
+      <div class="nudge" id="nudgeText"></div>
+    </div>
+
+    <!-- Screen 2: Date & Time -->
+    <div class="screen" data-screen="1">
+      <h1>روز و ساعتی که می‌تونی بیای رو انتخاب کن</h1>
+
+      <div class="field">
+        <label for="dateInput"روز</label>
+        <input type="date" id="dateInput">
+      </div>
+      <div class="field">
+        <label for="timeInput">ساعت</label>
+        <input type="time" id="timeInput">
+      </div>
+
+      <button class="primary-wide" id="btnDateNext" disabled>بعدی</button>
+    </div>
+
+    <!-- Screen 3: Order -->
+    <div class="screen" data-screen="2">
+      <div class="emoji-big">❓</div>
+      <h1>این‌دفعه کجا رو ترجیح میدی؟؟؟؟</h1>
+
+      <div class="order-list" id="orderGrid">
+        <div class="order-card" data-value="کافه" data-emoji="☕">
+          <span class="check">✓</span>
+          <span class="icon">☕</span>
+          <span class="label">کافه</span>
+        </div>
+        <div class="order-card" data-value="حوصله فضای بسته رو ندارم" data-emoji="🌲">
+          <span class="check">✓</span>
+          <span class="icon">🌲</span>
+          <span class="label">حوصله فضای بسته رو ندارم</span>
+        </div>
+        <div class="order-card" data-value="پاستا" data-emoji="🍝">
+          <span class="check">✓</span>
+          <span class="icon">🍝</span>
+          <span class="label">پاستا</span>
+        </div>
+      </div>
+
+      <button class="primary-wide" id="btnOrderNext" disabled>بریم</button>
+    </div>
+
+    <!-- Screen 4: Partner Email -->
+    <div class="screen" data-screen="3">
+      <h1>ایمیلت رو بذار تا دعوت‌نامه برات ارسال بشه</h1>
+
+      <div class="field" style="margin-top:20px;">
+        <label for="emailInput">ایمیل</label>
+        <input type="email" id="emailInput" placeholder="example@gmail.com" dir="ltr">
+      </div>
+
+      <button class="primary-wide" id="btnSubmit" disabled>ثبت نهایی</button>
+      <div class="error-text" id="submitError"></div>
+    </div>
+
+    <!-- Screen 5: Final -->
+    <div class="screen" data-screen="4">
+      <h1>خوشحالم نگفتی نه سروین خانم</h1>
+
+      <div class="final-box" id="finalSummary"></div>
+
+      <p class="subtitle" style="margin-bottom:6px;">میبینمت🍓❤️❤️</p>
+
+      <p class="subtitle" style="margin-bottom:12px;">ایمیلت هم چک کن😉</p>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  // ===== EmailJS config =====
+  const EMAILJS_PUBLIC_KEY  = "sitVdRnHDuRsR2LM8";
+  const EMAILJS_SERVICE_ID  = "service_ncqm9ik";
+  const TEMPLATE_PARTNER    = "template_g0itzzq";
+  const TEMPLATE_OWNER      = "template_nplyyk6";
+
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+  // ===== State =====
+  const state = {
+    order: null,
+    orderEmoji: null,
+    date: "",
+    time: ""
+  };
+
+  let currentScreen = 0;
+  const screens = document.querySelectorAll(".screen");
+  const dots = document.querySelectorAll(".dot");
+
+  function goTo(index){
+    screens.forEach(s => s.classList.remove("active"));
+    document.querySelector(`.screen[data-screen="${index}"]`).classList.add("active");
+    dots.forEach((d,i) => {
+      d.classList.remove("active","done");
+      if(i === index) d.classList.add("active");
+      else if(i < index) d.classList.add("done");
+    });
+    currentScreen = index;
+  }
+  goTo(0);
+
+  // ===== Screen 1: Yes / No =====
+  const btnYes = document.getElementById("btnYes");
+  const btnNo = document.getElementById("btnNo");
+  const nudgeText = document.getElementById("nudgeText");
+
+  const nudgeMessages = [
+    "بیشتر فکر کن",
+    "واقعا نمیخوای بیای؟",
+    "مطمئنی؟",
+    "برات متاسفم هنوزم جواب درست رو پیدا نکردی😔",
+    "بسه دیگه خجالت بکش خانممممم",
+    "تلاشت رو دوست دارم😭😂",
+    "خب خندیدیم دیگه نمیتونی بگی نه سروین جان😔"
+  ];
+  let noClicks = 0;
+  let yesScale = 1;
+
+  btnNo.addEventListener("click", () => {
+    noClicks++;
+    yesScale = Math.min(1 + noClicks * 0.18, 2.6);
+    btnYes.style.transform = `scale(${yesScale})`;
+    const noScale = Math.max(1 - noClicks * 0.08, 0.55);
+    btnNo.style.transform = `scale(${noScale})`;
+    btnNo.style.opacity = Math.max(1 - noClicks * 0.1, 0.4);
+    const msg = nudgeMessages[Math.min(noClicks - 1, nudgeMessages.length - 1)];
+    nudgeText.textContent = msg;
+  });
+
+  btnYes.addEventListener("click", () => {
+    goTo(1);
+  });
+
+  // ===== Screen 2: Date & Time =====
+  const dateInput = document.getElementById("dateInput");
+  const timeInput = document.getElementById("timeInput");
+  const btnDateNext = document.getElementById("btnDateNext");
+
+  function checkDateTime(){
+    const ok = dateInput.value && timeInput.value;
+    btnDateNext.disabled = !ok;
+    btnDateNext.classList.toggle("ready", !!ok);
+  }
+  dateInput.addEventListener("change", checkDateTime);
+  timeInput.addEventListener("change", checkDateTime);
+
+  btnDateNext.addEventListener("click", () => {
+    if(btnDateNext.disabled) return;
+    state.date = dateInput.value;
+    state.time = timeInput.value;
+    goTo(2);
+  });
+
+  // ===== Screen 3: Order =====
+  const orderCards = document.querySelectorAll(".order-card");
+  const btnOrderNext = document.getElementById("btnOrderNext");
+
+  orderCards.forEach(card => {
+    card.addEventListener("click", () => {
+      orderCards.forEach(c => c.classList.remove("selected"));
+      card.classList.add("selected");
+      state.order = card.dataset.value;
+      state.orderEmoji = card.dataset.emoji;
+      btnOrderNext.disabled = false;
+      btnOrderNext.classList.add("ready");
+    });
+  });
+
+  btnOrderNext.addEventListener("click", () => {
+    if(btnOrderNext.disabled) return;
+    goTo(3);
+  });
+
+  // ===== Screen 4: Email + Submit =====
+  const emailInput = document.getElementById("emailInput");
+  const btnSubmit = document.getElementById("btnSubmit");
+  const submitError = document.getElementById("submitError");
+
+  function isValidEmail(v){
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  }
+
+  function checkEmail(){
+    const ok = isValidEmail(emailInput.value.trim());
+    btnSubmit.disabled = !ok;
+    btnSubmit.classList.toggle("ready", ok);
+  }
+  emailInput.addEventListener("input", checkEmail);
+
+  function formatPersianDateTime(dateStr, timeStr){
+    const dt = new Date(`${dateStr}T${timeStr}:00`);
+    const dateFormatter = new Intl.DateTimeFormat("fa-IR", { weekday: "long", day: "numeric", month: "long" });
+    const persianDate = dateFormatter.format(dt);
+
+    const [h, m] = timeStr.split(":").map(Number);
+    const period = h < 12 ? "صبح" : "بعدازظهر";
+    const h12 = (h % 12) || 12;
+    const mm = String(m).padStart(2, "0");
+    const persianTime = `${h12}:${mm} ${period}`;
+
+    return { persianDate, persianTime };
+  }
+
+  btnSubmit.addEventListener("click", () => {
+    submitError.textContent = "";
+    const email = emailInput.value.trim();
+
+    if(!isValidEmail(email)){
+      submitError.textContent = "یه ایمیل معتبر وارد کن";
+      return;
+    }
+
+    const { persianDate, persianTime } = formatPersianDateTime(state.date, state.time);
+
+    btnSubmit.disabled = true;
+    btnSubmit.textContent = "در حال ارسال...";
+
+    const partnerParams = {
+      to_email: email,
+      date: persianDate,
+      time: persianTime,
+      order: `${state.orderEmoji} ${state.order}`
+    };
+
+    const ownerParams = {
+      date: persianDate,
+      time: persianTime,
+      order: `${state.orderEmoji} ${state.order}`,
+      partner_email: email
+    };
+
+    Promise.all([
+      emailjs.send(EMAILJS_SERVICE_ID, TEMPLATE_PARTNER, partnerParams),
+      emailjs.send(EMAILJS_SERVICE_ID, TEMPLATE_OWNER, ownerParams)
+    ]).then(() => {
+      document.getElementById("finalSummary").textContent =
+        `${persianDate}\n${persianTime}\n${state.orderEmoji} ${state.order}`;
+      goTo(4);
+    }).catch((err) => {
+      console.error(err);
+      submitError.textContent = "مشکلی پیش اومد، دوباره امتحان کن";
+      btnSubmit.disabled = false;
+      btnSubmit.textContent = "ثبت نهایی";
+    });
+  });
+</script>
+
+</body>
+</html>
