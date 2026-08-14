@@ -4,21 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>دعوت دیت🍓</title>
+<link rel="icon" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍓</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#ADD8E6;
-    --card-bg:#B0E0E6;
-    --box-bg:#cbe1f6;
-    --btn-off:#87CEEB;
-    --btn-on:#4682B4;
-    --heading:#5c2148;
-    --text:#9a6f8a;
-    --text-soft:#b98ca6;
-    --primary-a:#6495ED;
-    --primary-b:#4169E1;
-    --border-soft:#e6d6f0;
+    --bg:#A5C8A6;
+    --card-bg:#C2D3C3;
+    --box-bg:#A5C8A6;
+    --btn-off:#9CAA64;
+    --btn-on:#8B965B;
+    --heading:#000;
+    --text:#000;
+    --text-soft:#000;
+    --primary-a:#A5C8A6;
+    --primary-b:#8B965B;
+    --border-soft:#70ba74;
     --danger:#e0457b;
   }
 
@@ -29,9 +30,9 @@
     min-height:100vh;
     background:var(--bg);
     display:flex;
-    align-items:flex-start;
+    align-items:center;
     justify-content:center;
-    padding:28px 16px 60px;
+    padding:28px 16px;
     color:var(--text);
   }
 
@@ -126,8 +127,9 @@
   }
 
   .btn-yes{
-    background:linear-gradient(135deg, var(--primary-a), var(--primary-b));
-    color:#fff;
+    /* background: #8B965B; */
+    background:linear-gradient(150deg, var(--primary-a), var(--primary-b));
+    color:#000;
     font-size:16px;
     font-weight:700;
     padding:16px 34px;
@@ -152,7 +154,8 @@
   .nudge{
     margin-top:8px;
     font-size:13.5px;
-    color:var(--primary-b);
+    /* color:var(--primary-b); */
+    color: #000;
     font-weight:600;
     min-height:40px;
   }
@@ -175,11 +178,13 @@
     font-size:15px;
     color:var(--heading);
     background:#fff;
+    outline: none;
     border:1.5px solid var(--border-soft);
     border-radius:14px;
     padding:14px 16px;
     direction:ltr;
     text-align:center;
+
   }
   .field input:focus{
     border-color:var(--primary-a);
@@ -436,16 +441,72 @@
   let noClicks = 0;
   let yesScale = 1;
 
-  btnNo.addEventListener("click", () => {
+  btnNo.addEventListener("click", handleNoInteraction);
+  btnNo.addEventListener("mouseenter", handleNoInteraction);
+
+  function handleNoInteraction(){
+    if(btnNo.style.display === "none") return;
+
     noClicks++;
     yesScale = Math.min(1 + noClicks * 0.18, 2.6);
     btnYes.style.transform = `scale(${yesScale})`;
     const noScale = Math.max(1 - noClicks * 0.08, 0.55);
-    btnNo.style.transform = `scale(${noScale})`;
+    positionNoButtonRandomly(noScale);
     btnNo.style.opacity = Math.max(1 - noClicks * 0.1, 0.4);
     const msg = nudgeMessages[Math.min(noClicks - 1, nudgeMessages.length - 1)];
     nudgeText.textContent = msg;
-  });
+
+    if(noClicks >= nudgeMessages.length){
+      btnNo.style.display = "none";
+    }
+  }
+
+  function positionNoButtonRandomly(scale){
+    const screenEl = document.querySelector('.screen[data-screen="0"]');
+    const subtitleEl = screenEl.querySelector(".subtitle");
+    const cardEl = document.querySelector(".card");
+
+    const cardRect = cardEl.getBoundingClientRect();
+    const subtitleRect = subtitleEl.getBoundingClientRect();
+    const nudgeRect = nudgeText.getBoundingClientRect();
+    const yesRect = btnYes.getBoundingClientRect();
+
+    if(btnNo.style.position !== "fixed"){
+      btnNo.style.position = "fixed";
+      btnNo.style.zIndex = "50";
+      btnNo.style.transformOrigin = "center center";
+    }
+
+    const btnW = btnNo.offsetWidth;
+    const btnH = btnNo.offsetHeight;
+    const gap = 16;
+
+    const globalMinX = cardRect.left + 12;
+    const globalMaxX = cardRect.right - btnW - 12;
+    const minY = subtitleRect.bottom + 10;
+    const maxY = nudgeRect.top - btnH - 10;
+
+    const leftRangeMax = yesRect.left - gap - btnW;
+    const rightRangeMin = yesRect.right + gap;
+
+    const ranges = [];
+    if(leftRangeMax > globalMinX) ranges.push([globalMinX, leftRangeMax]);
+    if(rightRangeMin < globalMaxX) ranges.push([rightRangeMin, globalMaxX]);
+
+    let x;
+    if(ranges.length){
+      const [lo, hi] = ranges[Math.floor(Math.random() * ranges.length)];
+      x = lo + Math.random() * (hi - lo);
+    } else {
+      x = globalMinX;
+    }
+
+    const y = minY + Math.random() * Math.max(maxY - minY, 0);
+
+    btnNo.style.left = `${x}px`;
+    btnNo.style.top = `${y}px`;
+    btnNo.style.transform = `scale(${scale})`;
+  }
 
   btnYes.addEventListener("click", () => {
     goTo(1);
